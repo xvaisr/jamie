@@ -13,12 +13,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.engine.environment.maps;
+package jamie.engine.environment.maps.navmash;
 
 /**
  *
  * @author Roman Vais
  */
-public class InfluenceMap {
+public interface NavigationMash {
 
 }
