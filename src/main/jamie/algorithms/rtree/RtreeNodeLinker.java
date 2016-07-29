@@ -1,19 +1,29 @@
-/**
- * Thesis project, BP, anthill strategy game refactored
+/*
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * @author  Roman Vais, xvaisr00
- * @date    2015/05/27
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package RTreeAlgorithm;
+
+package jamie.algorithms.rtree;
+
 
 import java.awt.Rectangle;
 
 /**
  *
- * @author lennylinux
+ * @author Roman Vais
  */
 public interface RtreeNodeLinker {
-    
+
     public void setNode(RtreeNode node);
     public RtreeNode getNode();
     public Rectangle getBoundingBox();

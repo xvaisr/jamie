@@ -1,13 +1,28 @@
-/**
- * Thesis project, BP, anthill strategy game refactored
+/*
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * @author  Roman Vais, xvaisr00
- * @date    2015/05/27
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package RTreeAlgorithm;
+package jamie.algorithms.rtree;
 
 import java.util.Objects;
+
+/**
+ *
+ * @author Roman Vais
+ * @param <A>
+ * @param <B>
+ */
 
 public final class Pair <A, B> {
     private final A a;
@@ -17,11 +32,11 @@ public final class Pair <A, B> {
         this.a = a;
         this.b = b;
     }
-    
+
     public A getA() {
         return this.a;
     }
-    
+
     public B getB() {
         return this.b;
     }
@@ -30,8 +45,8 @@ public final class Pair <A, B> {
     public boolean equals(Object obj) {
         if (obj.getClass() != this.getClass()) {
             return false;
-        }        
-        Pair<A, B> pair = this.getClass().cast(obj);        
+        }
+        Pair<A, B> pair = this.getClass().cast(obj);
         return this.a.equals(pair.getA()) && this.b.equals(pair.getB());
     }
 

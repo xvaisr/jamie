@@ -1,36 +1,45 @@
-/**
- * Thesis project, BP, anthill strategy game refactored
+/*
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * @author  Roman Vais, xvaisr00
- * @date    2015/05/27
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package RTreeAlgorithm;
+package jamie.algorithms.rtree;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import static java.lang.Math.abs;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
-
 /**
  *
- * @author lennylinux
+ * @author Roman Vais
  * @param <T>
  */
+
 public class Rtree<T>{
     private RtreeNode<T> root;
-    
+
     public Rtree() {
         this.root = new RtreeNode();
     }
-    
+
     public Rtree(int min, int max) {
         this();
         this.root.setMinEnteries(min);
         this.root.setMaxEnteries(max);
     }
-    
+
     public ArrayList<T> Find(Point p) {
         ArrayList<T> objects = new ArrayList();
         ArrayList<RtreeNode> enteryList = this.Search(p);
@@ -39,7 +48,7 @@ public class Rtree<T>{
         }
         return objects;
     }
-    
+
     public ArrayList<T> Find(Rectangle r) {
         ArrayList<T> objects = new ArrayList();
         ArrayList<RtreeNode> enteryList = this.Search(r);
@@ -48,40 +57,40 @@ public class Rtree<T>{
         }
         return objects;
     }
-    
+
     public void Insert(T object, Point p) {
         RtreeNode<T> entery = new RtreeNode();
         entery.setContent(object, p);
         this.Insert(entery, -1);
     }
-    
+
     public void Insert(T object, Rectangle r) {
         RtreeNode<T> entery = new RtreeNode();
         entery.setContent(object, r);
         this.Insert(entery, -1);
     }
-    
+
     public void Delete(T object, Point p) {
         this.Delete(object, new Rectangle((p.x - 1), (p.y - 1), 2, 2));
     }
-    
+
     public void Delete(T object, Rectangle r) {                                 // delete
         /*
           D1 [Find node containg record] Invoke FindLeaf  to locate leaf L
           containing E. Stop if record was not found.
          */
         RtreeNode node = this.FindLeaf(object, r);
-        
+
         /*
           D2 [Remove entery] Remove E from L
          */
-        
+
         this.DeleteEntery(node, object);
-        
+
         /*
           D3 [Propagate changes] Invoke CondenseTree.
-        
-          CT1 [Inicialize] Set N = L and Let Q to be set of eliminated nodes. 
+
+          CT1 [Inicialize] Set N = L and Let Q to be set of eliminated nodes.
           Set Q to be empty.
          */
         ArrayList<RtreeNode> Q = new ArrayList();
@@ -89,17 +98,17 @@ public class Rtree<T>{
             /*
               CT2 [Find parent entry] If N is a root skyp to CT6. Otherwise let
               P to be parent of N and let En be N's entry in P.
-            
+
               CT3 [eliminate under-full node] If N has fewer than m enteries
               delete En from P and add N to set Q
                     -- already known that node is underflowing
              */
-            
+
             if (node.getUnderflow() && !node.getIsRoot()) {
                 Q.addAll(node.getChildList());
-                this.DeleteNode(node);           
+                this.DeleteNode(node);
             }
-            
+
             /*
               CT4 [Adjust covering rectangle] If N has not been eliminated,
               adjust En's I to tightly contain all enteries in N
@@ -107,20 +116,20 @@ public class Rtree<T>{
                   -- all rectangles are adjusted on change of node
                   -- parent rectangles need to be adjusted
              */
-            
+
             else {
                 node.adjustRectangle();
             }
-            
+
             /*
               CT5 [Move up one level in tree] set N = P and repeat from CT2
              */
-            
+
             // node's parent is adjusted by delete operation;
             node = node.getParent();
-            
+
         }
-        
+
         /*
           CT6 [Re-Insert] reinsert All Enteries of nodes in set Q. Enteries
           from eliminated leaf nodes are reinserted in tree leaves as described
@@ -128,18 +137,18 @@ public class Rtree<T>{
           placed higher in the tree so that leaves of their dependent subtrees
           will be on the same levels as the leaves of the main tree.
          */
-        
+
         for (RtreeNode orphan : Q) {
-            this.Insert(orphan, (orphan.getLevel() - 1));            
+            this.Insert(orphan, (orphan.getLevel() - 1));
         }
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="supporting (sub)algorithms - only private methods">
-    
+
     private void Insert(RtreeNode entery, int level) {
-        
+
         // System.out.println("Vkladam : ".concat(entery.toString()));
-        
+
         /*
           Inserting index records for new data touples is similar to insetion
           in B-tree in that new index records are added to the leaves, nodes
@@ -147,34 +156,34 @@ public class Rtree<T>{
          */
         RtreeNode node;
         Pair<RtreeNode, RtreeNode> split = null;
-        
+
         /*
           I1 [Find position for new record] Inwoke ChoeseLeaf to select node L
           in which to place entery
          */
         node = this.ChooseSubtree(entery, level);
         // System.out.println("Vybran : ".concat(node.toString()));
-        
+
         /*
           I2 [Add record to the leaf node] If L has room for another entery,
           insatall E. Otherwise  invoke Split node to obtain L and LL containing
           E and all old enteries.
          */
         node.addChildnode(entery);
-        while (node.getOwerflow()) { 
+        while (node.getOwerflow()) {
             /*
               AT1 Set N = L (L == leaf) if N was split previously, set NN to be
               resulting second node.
-                  -- here represented by Pair split 
+                  -- here represented by Pair split
               AT2 [Check if done] If N is root -> stop;
                   -- already known that split was done
                   -- split is performed even on root node
              */
             split = this.SplitNode(node);
-            // System.out.println("Split : ".concat(split.getA().toString().concat(" a ").concat(split.getB().toString())));            
-            
+            // System.out.println("Split : ".concat(split.getA().toString().concat(" a ").concat(split.getB().toString())));
+
             RtreeNode parent = node.getParent();
-            
+
             if (node.getIsRoot()) {
                 /*
                   I4 [ Grow tree taller] If node propagation caused root to split
@@ -187,12 +196,12 @@ public class Rtree<T>{
                 this.root.addChildnode(split.getB());
                 node = this.root;
             }
-            
+
             /*
-              I3 [Propagate changes upward] Inwoke AdjustTree on L also passing 
+              I3 [Propagate changes upward] Inwoke AdjustTree on L also passing
               LL if a split was performed.
-            
-              AT3 [Adjust covering rectangle in parent entry] 
+
+              AT3 [Adjust covering rectangle in parent entry]
                   -- rectangle is adjusted every time node is added. If existing
                      node has been changed, paretn is notified.
 
@@ -201,11 +210,11 @@ public class Rtree<T>{
               Enn-rectangle enclosing all rectangles in NN. Add NN to P (N's parent)
               if there is a room;
              */
-            else {               
+            else {
                 parent.removeChild(node);
                 parent.addChildnode(split.getA());
                 parent.addChildnode(split.getB());
-                
+
                 /*
                   AT5 [Move up to next level] Set N = P and set NN = PP if slpit occured.
                   Repeat from AT2
@@ -213,18 +222,18 @@ public class Rtree<T>{
 
                 node = parent;
             }
-            
 
-            
+
+
         }
-        
+
         // adjist the rest of the tree;
         while(node != null) {
             node.adjustRectangle();
             node = node.getParent();
         }
     }
-    
+
     private RtreeNode ChooseSubtree(RtreeNode entery, int level) {              // Insert
         int enlargement = Integer.MAX_VALUE;
         int area = Integer.MAX_VALUE;
@@ -232,10 +241,10 @@ public class Rtree<T>{
             level = Integer.MAX_VALUE;
         }
         // placing entery E - object; EI - r
-        
+
         // CL1 Set N to be the root node
         RtreeNode node = this.root;
-        
+
         // CL2 if N is leaf, return N
         while (node.getLevel() < level && !node.getIsLeaf()) {
             ArrayList<RtreeNode> childSet, nodeSet;
@@ -244,8 +253,8 @@ public class Rtree<T>{
                 break;
             }
             nodeSet = new ArrayList();
-            
-            
+
+
             /* CL3 if N is not a leaf, let F be entery in N whose rectangle
                FI needs least enlargement to include EI.                */
             for (RtreeNode n : childSet) {
@@ -259,7 +268,7 @@ public class Rtree<T>{
                     nodeSet.add(n);
                 }
             }
-            
+
             // Resolve ties by smallest area rectangle;
             for (RtreeNode n : nodeSet) {
                 int a = n.getArea();
@@ -272,54 +281,54 @@ public class Rtree<T>{
                     childSet.add(n);
                 }
             }
-            
+
             // we need at least one child node selected
             if (childSet.isEmpty()) {
                 return null; // Oops !!! error :(
             }
-            
+
             // if these are still equale, pick one
-            node = childSet.get(0); 
+            node = childSet.get(0);
         } // while end - continue from CL2
-        
-        
+
+
         return node;
     }
 
     private Pair<RtreeNode, RtreeNode> SplitNode(RtreeNode node) {              // node spliting
         /*
           divide a set of M + 1 index enteries in two groups
-          Quadratic split and linear split are the same, but use different 
-          PickSeeds algorithm 
+          Quadratic split and linear split are the same, but use different
+          PickSeeds algorithm
          */
-        
+
         /*
           QS1 [Pick first entery of each group] Apply algorithm PickSeeds to
           choese two enteries to be first elements of groups. Assign each to
           a group
          */
-        
+
         ArrayList<RtreeNode> childList = node.getChildList();
         Pair<RtreeNode, RtreeNode> pair = QadraticPickSeeds(childList);
-        
+
         RtreeNode groupA = new RtreeNode();
         groupA.addChildnode(pair.getA());
-        
+
         RtreeNode groupB = new RtreeNode();
         groupB.addChildnode(pair.getB());
-        
+
         /*
           QS2.1 [check if done] If all enteries have been assigned stop.
          */
-        
+
         while (!childList.isEmpty()) {
-        
+
             /*
               QS3 [select entery to be assigned] Invoke algoritm PickNext to choese
               next entery to assign. Add it to the group with rectangle which will
               have to enlarge least to acomodate it.
              */
-            
+
             node = Rtree.PickNext(childList, groupA, groupB);
             int da = groupA.getEnlargement(node.getRectangle());
             int db = groupB.getEnlargement(node.getRectangle());
@@ -331,13 +340,13 @@ public class Rtree<T>{
                 groupB.addChildnode(node);
             }
             else {
-                /* 
+                /*
                   resolve ties by adding entery into group:
-                                - with smaller area 
+                                - with smaller area
                                 - with fewer enteries
                                 - oh, it doesn't matter any more ... pick one!
                  */
-                
+
                 // smaller area tie resolving
                 if (groupA.getArea() < groupB.getArea()) {
                     groupA.addChildnode(node);
@@ -345,9 +354,9 @@ public class Rtree<T>{
                 else if(groupA.getArea() > groupB.getArea()) {
                     groupB.addChildnode(node);
                 }
-                
+
                 else {
-                    
+
                     // fewer enteries resolving
                     if (groupA.getChildnodeCount() < groupB.getChildnodeCount()) {
                         groupA.addChildnode(node);
@@ -358,7 +367,7 @@ public class Rtree<T>{
                     }
                 }
             }
-            
+
             if(childList.isEmpty()) break;
 
             /*
@@ -366,7 +375,7 @@ public class Rtree<T>{
               the rest must be assignet to it in order to have minimum number
               m, asign them and stop
              */
-            
+
             if (groupA.getUnderflow() && !groupB.getUnderflow()) {
                 int required = groupA.getMinEnteries() - groupA.getChildnodeCount();
                 if (required >= childList.size()) {
@@ -375,9 +384,9 @@ public class Rtree<T>{
                     }
                     break;
                 }
-                
+
             }
-            
+
             if (!groupA.getUnderflow() && groupB.getUnderflow()) {
                 int required = groupB.getMinEnteries() - groupB.getChildnodeCount();
                 if (required >= childList.size()) {
@@ -387,25 +396,25 @@ public class Rtree<T>{
                     break;
                 }
             }
-            
+
         // repeat from QS2
         }
-        
+
         return new Pair(groupA, groupB);
     }
-    
-    private static Pair<RtreeNode, RtreeNode> 
+
+    private static Pair<RtreeNode, RtreeNode>
         QadraticPickSeeds(ArrayList<RtreeNode> list) {                          // node spliting
         /*
           QPS1 [Calculate inefficiency of grouping enteries together]
           For each pair of enteries E1 and E2 compose rectangle J.
           Calculate area D = J.getArea - E1.getArea - E2.getArea
-        
+
           QPS2 [Choese the most wasteful pair] choese pair with largest D
         */
         Pair<RtreeNode, RtreeNode> p = null;
         int d = Integer.MIN_VALUE; // negative numbers mean overlap
-        
+
         for (RtreeNode a : list) {
             for(RtreeNode b: list) {
                 if (a != b) {
@@ -422,29 +431,29 @@ public class Rtree<T>{
                 }
             }
         }
-        
+
         if (p != null) {
             list.remove(p.getA());
             list.remove(p.getB());
         }
         return p;
     }
-    
+
     private static Pair<RtreeNode, RtreeNode>
         LinearPickSeeds(ArrayList<RtreeNode> list) {                            // node spliting  *** yet to be implemented
             return null;                                                        // not used
     }
-    
+
     private static RtreeNode // Pair<RtreeNode, RtreeNode> - for future optimalization
         PickNext(ArrayList<RtreeNode> list, RtreeNode groupA, RtreeNode groupB) // node spliting
     {
         /*
           PN1 [Determine cost of putting each entery in each group]
           For each entery E not yet in group calculate D1 and D2
-          - area increase required to include enteri into group A 
-          (group 1) and group B (group 2) 
+          - area increase required to include enteri into group A
+          (group 1) and group B (group 2)
          */
-        
+
         int diff;
         diff = -1; // intentionaly lesser than zero
         RtreeNode chosenOne = null;
@@ -452,26 +461,26 @@ public class Rtree<T>{
            int d1 = groupA.getEnlargement(node.getRectangle());
            int d2 = groupB.getEnlargement(node.getRectangle());
            int df = abs(d1 - d2);
-           
+
            /*
              PN2 [Find the entery with greatis preference for the group]
              choese any entery with maximum diference between D1 and D2
             */
-           
+
            if (df > diff) {
                chosenOne = node;
                diff = df;
            }
         }
         list.remove(chosenOne);
-        return chosenOne;   
+        return chosenOne;
     }
-    
+
     private ArrayList<RtreeNode> Search(Rectangle r) {
         ArrayList<RtreeNode> enteries = new ArrayList();
         ArrayDeque<RtreeNode> nodes = new ArrayDeque();
         nodes.add(this.root);
-        
+
         while (!nodes.isEmpty()) {
             RtreeNode n = nodes.poll();
             ArrayList<RtreeNode> children;
@@ -488,18 +497,18 @@ public class Rtree<T>{
                         enteries.add(node);
                     }
                 }
-                
+
             }
         }
-        
+
         return enteries;
     }
-    
+
     private ArrayList<RtreeNode> Search(Point p) {
         ArrayList<RtreeNode> enteries = new ArrayList();
         ArrayDeque<RtreeNode> nodes = new ArrayDeque();
         nodes.add(this.root);
-        
+
         while (!nodes.isEmpty()) {
             RtreeNode n = nodes.poll();
             ArrayList<RtreeNode> children;
@@ -516,13 +525,13 @@ public class Rtree<T>{
                         enteries.add(node);
                     }
                 }
-                
+
             }
         }
-        
+
         return enteries;
     }
-        
+
     private RtreeNode<T> FindEntry(T object, Rectangle r) {                     // finds node entry containing object
         ArrayList<RtreeNode> list = this.Search(r);
         RtreeNode<T> result = null;
@@ -534,7 +543,7 @@ public class Rtree<T>{
         }
         return result;
     }
-    
+
     private RtreeNode<T> FindLeaf(T object, Rectangle r) {                      // find leaf containing entry with given object
         RtreeNode node = this.FindEntry(object, r);
         if (node != null) {
@@ -542,13 +551,13 @@ public class Rtree<T>{
         }
         return node;
     }
-    
+
     private void DeleteEntery(RtreeNode node, T object) {
         if (node == null) {
             return;
         }
-        ArrayList<RtreeNode> list = node.getChildList(); 
-        
+        ArrayList<RtreeNode> list = node.getChildList();
+
         for (RtreeNode<T> entery : list) {
             if(entery.getContent() == object) {
                 node.removeChild(entery);
@@ -559,7 +568,7 @@ public class Rtree<T>{
             node.getParent().adjustRectangle();
         }
     }
-    
+
     private void DeleteNode(RtreeNode node) {
         // if node is not root, remove it from it's parent
         if (!node.getIsRoot()) {
@@ -569,7 +578,7 @@ public class Rtree<T>{
         // throw node away ...
     }
     // </editor-fold>
-    
+
 }
 
 // <editor-fold defaultstate="collapsed" desc="unused methods, commnted out">
@@ -579,17 +588,17 @@ private RtreeNode ChooseLeaf(T object, Rectangle r) {                           
         int enlargement = Integer.MAX_VALUE;
         int area = Integer.MAX_VALUE;
         // placing entery E - object; EI - r
-        
+
         // CL1 Set N to be the root node
         RtreeNode node = this.root;
-        
+
         // CL2 if N is leaf, return N
         while (!node.getIsLeaf()) {
             ArrayList<RtreeNode> childSet, nodeSet;
             childSet = node.getChildList();
             nodeSet = new ArrayList();
-            
-            
+
+
             /* CL3 if N is not a leaf, let F be entery in N whose rectangle
                FI needs least enlargement to include EI.                * /
             for (RtreeNode n : childSet) {
@@ -603,7 +612,7 @@ private RtreeNode ChooseLeaf(T object, Rectangle r) {                           
                     nodeSet.add(n);
                 }
             }
-            
+
             // Resolve ties by smallest area rectangle;
             for (RtreeNode n : nodeSet) {
                 int a = n.getArea();
@@ -616,17 +625,17 @@ private RtreeNode ChooseLeaf(T object, Rectangle r) {                           
                     childSet.add(n);
                 }
             }
-            
+
             // we need at least one child node selected
             if (childSet.isEmpty()) {
                 return null; // Oops !!! error :(
             }
-            
+
             // if these are still equale, pick one
-            node = childSet.get(0); 
+            node = childSet.get(0);
         } // while end - continue from CL2
-        
-        
+
+
         return node;
     }
 
