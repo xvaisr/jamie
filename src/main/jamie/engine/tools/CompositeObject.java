@@ -13,17 +13,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.engine.environment.maps.level;
+package jamie.engine.tools;
 
 /**
  *
  * @author Roman Vais
  */
-public class LevelMap {
+public class CompositeObject {
 
-    public LevelMap() {
+
+    public void invokeMethod(Object... args) {
     }
-
-      
 
 }

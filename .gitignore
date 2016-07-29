@@ -1,5 +1,5 @@
 manifest.mf
 nbbuild.xml
 nbproject
-./src/main/jamie/Agents
-./src/main/jamie/Enviroment
+src/main/jamie/Agents
+src/main/jamie/Enviroment
