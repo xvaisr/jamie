@@ -13,18 +13,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.algorithms.rtree;
-
-
-import java.awt.Rectangle;
+package jamie.graphics.ui.input;
 
 /**
  *
  * @author Roman Vais
  */
-public interface RtreeNodeLinker {
+public interface MouseEvent {
 
-    public void setNode(RtreeNode node);
-    public RtreeNode getNode();
-    public Rectangle getBoundingBox();
 }

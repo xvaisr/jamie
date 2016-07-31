@@ -8,6 +8,7 @@ package jamie.graphics.ui.components.containers;
 
 //import GraphicInterface.InterfaceViews.View;
 import jamie.graphics.ui.components.AbstractContainer;
+import java.awt.Dimension;
 
 /**
  *
@@ -19,10 +20,15 @@ public class EmptyContainer extends AbstractContainer {
         super();
     }
 
-    /*
-    public EmptyContainer(View view) {
-        super(view);
+    public EmptyContainer(Dimension size) {
+        super();
+        super.setSize(size);
     }
-    */
+
+    public EmptyContainer(int width, int height) {
+        super();
+        super.setSize(width, height);
+    }
+
 
 }

@@ -13,7 +13,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.algorithms.rtree;
+package jamie.tools.structures;
 
 import java.util.Objects;
 

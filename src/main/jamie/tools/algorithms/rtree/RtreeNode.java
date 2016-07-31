@@ -13,7 +13,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.algorithms.rtree;
+package jamie.tools.algorithms.rtree;
 
 import java.awt.Point;
 import java.util.ArrayList;

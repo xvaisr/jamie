@@ -155,12 +155,12 @@ public abstract class AbstractContainer extends AbstractComponent implements Con
     */
 
     @Override
-    public void updateBox() {
+    public final void updateBox() {
         super.updateBox();
         this.updateContent();
     }
 
-    private void updateContent() {
+    protected void updateContent() {
         synchronized (this.components) {
             for (Component comp : this.components) {
                 comp.updateBox();
@@ -169,7 +169,7 @@ public abstract class AbstractContainer extends AbstractComponent implements Con
     }
 
     @Override
-    public final void addComponent(Component comp) {
+    public void addComponent(Component comp) {
         synchronized (this.components) {
             this.components.add(comp);
             comp.setParent(this);
@@ -182,15 +182,18 @@ public abstract class AbstractContainer extends AbstractComponent implements Con
     }
 
     @Override
-    public final void removeComponent(Component comp) {
+    public boolean removeComponent(Component comp) {
         synchronized (this.components) {
-            this.components.remove(comp);
-            comp.setParent(null);
+            boolean rm = false;
+            rm = this.components.remove(comp);
+            if (rm) comp.setParent(null);
+            return rm;
         }
+
     }
 
     @Override
-    public final void removeAllComponents() {
+    public void removeAllComponents() {
         synchronized (this.components) {
             this.components.clear();
         }

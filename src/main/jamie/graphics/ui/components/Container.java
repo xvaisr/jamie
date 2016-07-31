@@ -19,7 +19,7 @@ public interface Container extends Component {
 
     public void addComponent(Component comp);
     public ArrayList<Component> getComponents();
-    public void removeComponent(Component comp);
+    public boolean removeComponent(Component comp);
     public void removeAllComponents();
 
     /*
