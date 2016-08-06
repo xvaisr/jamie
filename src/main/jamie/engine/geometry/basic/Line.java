@@ -13,26 +13,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.engine;
-
-import jamie.engine.geometry.basic.Point;
+package jamie.engine.geometry.basic;
 
 /**
  *
  * @author Roman Vais
  */
-public class EngineSingleton {
-
-    public static void main(String[] args) {
-        Point p, q;
-        p = new Point(1, 2, 3);
-        try {
-            q = p.clone();
-            System.out.println(q);
-        }
-        catch (CloneNotSupportedException ex) {
-            System.out.println(ex);
-        }
-    }
+public class Line {
 
 }

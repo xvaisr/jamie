@@ -1,4 +1,4 @@
-/*
+/*0,
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -13,26 +13,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.engine;
+package jamie.engine.geometry.basic;
 
-import jamie.engine.geometry.basic.Point;
+import java.io.Serializable;
 
 /**
  *
  * @author Roman Vais
  */
-public class EngineSingleton {
+public class Dimension implements Serializable {
 
-    public static void main(String[] args) {
-        Point p, q;
-        p = new Point(1, 2, 3);
-        try {
-            q = p.clone();
-            System.out.println(q);
-        }
-        catch (CloneNotSupportedException ex) {
-            System.out.println(ex);
-        }
+    private final int w;
+    private final int h;
+
+    public Dimension() {
+        this(0, 0);
     }
+
+    public Dimension(int weight, int height) {
+        this.w = weight;
+        this.h = height;
+    }
+
+    public int getWidth() {
+        return this.w;
+    }
+
+    public int getHeight() {
+        return this.h;
+    }
+
+
+
 
 }

@@ -13,26 +13,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.engine;
+package jamie.engine.geometry.basic;
 
-import jamie.engine.geometry.basic.Point;
+import java.util.List;
 
 /**
  *
  * @author Roman Vais
  */
-public class EngineSingleton {
+public interface Shape {
 
-    public static void main(String[] args) {
-        Point p, q;
-        p = new Point(1, 2, 3);
-        try {
-            q = p.clone();
-            System.out.println(q);
-        }
-        catch (CloneNotSupportedException ex) {
-            System.out.println(ex);
-        }
-    }
+    public boolean contains(Point p);
+    public boolean contains(Rectangle r);
+    public boolean contains(Shape s);
 
+    public boolean intersects(Rectangle r);
+    public boolean intersects(Shape s);
+
+    public Rectangle getBoundingBox();
+    public Cube getBoundingCube();
+
+    public List<Point> getVertices();
 }

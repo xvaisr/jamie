@@ -15,14 +15,9 @@
 
 package jamie.graphics.ui.components.containers;
 
-import Agents.Actions.update_percepts;
 import jamie.graphics.ui.components.AbstractContainer;
-import jamie.graphics.ui.components.Align;
 import jamie.graphics.ui.components.Component;
 import jamie.graphics.ui.components.Container;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 /**

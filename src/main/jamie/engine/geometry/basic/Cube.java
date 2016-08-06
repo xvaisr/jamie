@@ -13,26 +13,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.engine;
+package jamie.engine.geometry.basic;
 
-import jamie.engine.geometry.basic.Point;
+import java.io.Serializable;
 
 /**
  *
  * @author Roman Vais
  */
-public class EngineSingleton {
+class Cube implements Serializable{
 
-    public static void main(String[] args) {
-        Point p, q;
-        p = new Point(1, 2, 3);
-        try {
-            q = p.clone();
-            System.out.println(q);
-        }
-        catch (CloneNotSupportedException ex) {
-            System.out.println(ex);
-        }
-    }
+    private Point bln;   // bottom left near
+    private Point trn;   // top right near
+    private Point brf;   // bottom right far
 
 }
