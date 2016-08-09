@@ -13,9 +13,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.engine.geometry.basic;
+package jamie.engine.geometry.shapes;
 
+import jamie.engine.geometry.basic.Dimension;
+import jamie.engine.geometry.basic.Point;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -63,6 +67,15 @@ public class Rectangle implements Serializable{
 
         this.bl = bl;
         this.tr = tr;
+    }
+
+    public Point getBottomLeftCorner() {
+        try {
+            return bl.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            return new Point(this.bl.x(), this.bl.y());
+        }
     }
 
 

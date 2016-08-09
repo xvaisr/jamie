@@ -15,10 +15,100 @@
 
 package jamie.engine.geometry.shapes;
 
+import jamie.engine.geometry.basic.Point;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  * @author Roman Vais
  */
-public class Polygon {
+public class Polygon implements Serializable, Shape {
+
+    private ArrayList<Point> vericies;
+
+    public Polygon() {
+        this.vericies = new ArrayList<>();
+    }
+
+
+
+
+
+    @Override
+    public boolean contains(Point p) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean contains(Rectangle r) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean contains(Shape s) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean intersects(Rectangle r) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean intersects(Shape s) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Rectangle getBoundingBox() {
+        ArrayList<Point> set;
+        int x, y, w, h;
+
+        set = (ArrayList<Point>) this.vericies.clone();
+        Collections.sort(set);
+        x = set.get(0).x();
+        w = set.get(set.size() -1 ).x() - set.get(0).x();
+
+        Point.setSortKey(Point.SortBy.y);
+        Collections.sort(set);
+        y = set.get(0).y();
+        h = set.get(set.size() -1 ).y() - set.get(0).y();
+
+        Point.setSortKey(Point.SortBy.y);
+        return new Rectangle(new Point(x, y), w, h);
+    }
+
+    @Override
+    public Cube getBoundingCube() {
+        ArrayList<Point> set;
+        int x, y, z, w, h, d;
+
+        set = (ArrayList<Point>) this.vericies.clone();
+        Collections.sort(set);
+        x = set.get(0).x();
+        w = set.get(set.size() -1 ).x() - set.get(0).x();
+
+        Point.setSortKey(Point.SortBy.y);
+        Collections.sort(set);
+        y = set.get(0).y();
+        h = set.get(set.size() -1 ).y() - set.get(0).y();
+
+        Point.setSortKey(Point.SortBy.z);
+        Collections.sort(set);
+        z = set.get(0).z();
+        d = set.get(set.size() -1 ).z() - set.get(0).z();
+
+        Point.setSortKey(Point.SortBy.y);
+        return new Cube(new Point(x, y, z), w, h, d);
+
+    }
+
+    @Override
+    public List<Point> getVertices() {
+        return Collections.unmodifiableList(this.vericies);
+    }
 
 }

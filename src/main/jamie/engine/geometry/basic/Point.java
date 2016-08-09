@@ -21,7 +21,11 @@ import java.io.Serializable;
  *
  * @author Roman Vais
  */
-public class Point implements Cloneable, Serializable {
+public class Point implements Cloneable, Serializable, Comparable<Point> {
+
+    public static enum SortBy {x,y,z};
+
+    private static SortBy key = SortBy.x;
 
     private int x;
     private int y;
@@ -114,6 +118,7 @@ public class Point implements Cloneable, Serializable {
      * by shifting it along the axis by given distance.
      * @param dx - distance on X axis to move new point
      * @param dy - distance on Y axis to move new point
+     * @return copy of this point shifted by given distances
      */
     public Point translate (int dx, int dy) {
         return translate(dx, dy, 0);
@@ -125,6 +130,7 @@ public class Point implements Cloneable, Serializable {
      * @param dx - distance on X axis to move new point
      * @param dy - distance on Y axis to move new point
      * @param dz - distance on Z axis to move new point
+     * @return copy of this point shifted by given distances
      */
     public Point translate (int dx, int dy, int dz) {
         Point p;
@@ -164,6 +170,31 @@ public class Point implements Cloneable, Serializable {
         hash = 67 * hash + this.y;
         hash = 67 * hash + this.z;
         return hash;
+    }
+
+    public static void setSortKey(SortBy key) {
+        if (key == null) throw new NullPointerException();
+        Point.key = key;
+    }
+
+    @Override
+    public int compareTo(Point p) {
+        int result;
+        switch (Point.key) {
+            case x:
+                result = this.x - p.x();
+            break;
+            case y:
+                result = this.y - p.y();
+            break;
+            case z:
+                result = this.z - p.z();
+            break;
+            default:
+                result = 0;
+            break;
+        }
+        return result;
     }
 
 }

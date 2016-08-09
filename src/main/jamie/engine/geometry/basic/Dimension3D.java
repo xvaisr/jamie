@@ -15,23 +15,32 @@
 
 package jamie.engine.geometry.basic;
 
-import java.util.List;
-
 /**
  *
  * @author Roman Vais
  */
-public interface Shape {
+public class Dimension3D extends Dimension {
 
-    public boolean contains(Point p);
-    public boolean contains(Rectangle r);
-    public boolean contains(Shape s);
+    private final int d;
 
-    public boolean intersects(Rectangle r);
-    public boolean intersects(Shape s);
+    public Dimension3D() {
+        super();
+        this.d = 0;
+    }
 
-    public Rectangle getBoundingBox();
-    public Cube getBoundingCube();
+    public Dimension3D(int weight, int height, int depth) {
+        super(weight, height);
+        this.d = depth;
+    }
 
-    public List<Point> getVertices();
+    public int getDepth() {
+        return this.d;
+    }
+
+    @Override
+    public String toString() {
+        return this.getWidth() + "x" + this.getHeight() + "x" + this.d;
+    }
+
+
 }

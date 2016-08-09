@@ -13,18 +13,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.engine.geometry.basic;
+package jamie.engine.geometry.shapes;
 
-import java.io.Serializable;
+import jamie.engine.geometry.basic.Point;
+import jamie.engine.geometry.shapes.Cube;
+import jamie.engine.geometry.shapes.Rectangle;
+import java.util.List;
 
 /**
  *
  * @author Roman Vais
  */
-class Cube implements Serializable{
+public interface Shape {
 
-    private Point bln;   // bottom left near
-    private Point trn;   // top right near
-    private Point brf;   // bottom right far
+    public boolean contains(Point p);
+    public boolean contains(Rectangle r);
+    public boolean contains(Shape s);
 
+    public boolean intersects(Rectangle r);
+    public boolean intersects(Shape s);
+
+    public Rectangle getBoundingBox();
+    public Cube getBoundingCube();
+
+    public List<Point> getVertices();
 }

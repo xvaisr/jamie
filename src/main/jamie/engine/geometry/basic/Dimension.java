@@ -43,6 +43,13 @@ public class Dimension implements Serializable {
         return this.h;
     }
 
+    @Override
+    public String toString() {
+        return this.w + "x" + this.h;
+    }
+
+
+
 
 
 
