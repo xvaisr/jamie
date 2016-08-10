@@ -18,7 +18,9 @@ package jamie.engine.geometry.basic;
 import java.io.Serializable;
 
 /**
- *
+ * Class represents point in a three-dimensional space of Cartesian coordinate system.
+ * Class has methods that allow for using it's instances as two-dimensional or
+ * three-dimensional points.
  * @author Roman Vais
  */
 public class Point implements Cloneable, Serializable, Comparable<Point> {
@@ -31,14 +33,41 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
     private int y;
     private int z;
 
+    /**
+     * Creates mutable instance of Point suitable for a three-dimensional space
+     * represented by Cartesian coordinate system.
+     * Default constructor without parameters creates point with coordinates equal
+     * to Point(X, Y, Z) = [0, 0, 0];
+     */
     public Point() {
         this(0, 0, 0);
     }
 
+    /**
+     * Creates mutable instance of Point suitable for a three-dimensional space
+     * represented by Cartesian coordinate system.
+     * Constructor with X and Y parameters creates point with coordinates equal
+     * to Point(X, Y, Z) = [x, y, 0]; allowing it to effectively act
+     * as in two-dimensional space.
+     *
+     * @param x - value of coordinates on X axis
+     * @param y - value of coordinates on Y axis
+     */
     public Point(int x, int y) {
         this(x, y, 0);
     }
 
+    /**
+     * Creates mutable instance of Point suitable for a three-dimensional space
+     * represented by Cartesian coordinate system.
+     * Constructor with X and Y parameters creates point with coordinates equal
+     * to Point(X, Y, Z) = [x, y, 0]; allowing it to effectively act
+     * as in two-dimensional space.
+     *
+     * @param x - value of coordinates on X axis
+     * @param y - value of coordinates on Y axis
+     * @param z - value of coordinates on Z axis
+     */
     public Point(int x, int y, int z) {
         this.x = x;
         this.y = y;
@@ -172,6 +201,11 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
         return hash;
     }
 
+    /**
+     * Sets key for comparison of two Point instances. The value determines by
+     * which axis values should be instances compered.
+     * @param key - one of Point.SortBy.x Point.SortBy.y Point.SortBy.z values
+     */
     public static void setSortKey(SortBy key) {
         if (key == null) throw new NullPointerException();
         Point.key = key;
