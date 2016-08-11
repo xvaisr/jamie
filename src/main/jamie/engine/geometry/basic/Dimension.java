@@ -35,6 +35,11 @@ public class Dimension implements Serializable {
         this.h = height;
     }
 
+    public Dimension(Point p, Point q) {
+        this.w = Math.abs(q.x() - p.x());
+        this.h = Math.abs(q.y() - p.y());
+    }
+
     public int getWidth() {
         return this.w;
     }
