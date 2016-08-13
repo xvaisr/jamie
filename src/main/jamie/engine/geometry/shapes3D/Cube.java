@@ -49,34 +49,33 @@ public class Cube implements Serializable, Shape3D {
     }
 
     public Cube(Point bln, Point trf) {
-        int x, y, z;
+        int xb, xt, yb, yt, zb, zt;
 
-        if (trf.x() < bln.x()) {
-            x = trf.x();
-            trf.setLocation(bln.x(), trf.y());
-            bln.setLocation(x, bln.y());
+        xb = bln.x();
+        yb = bln.y();
+        zb = bln.z();
+
+        xt = trf.x();
+        yt = trf.y();
+        zt = trf.z();
+
+        if (xt < xb) {
+            xb = xt;
+            xt = bln.x();
         }
 
-        if (trf.y() < bln.y()) {
-            y = trf.y();
-            trf.setLocation(trf.x(), bln.y());
-            bln.setLocation(bln.x(), y);
+        if (yt < yb) {
+            yb = yt;
+            yt = bln.y();
         }
 
-        if (trf.y() < bln.y()) {
-            y = trf.y();
-            trf.setLocation(trf.x(), bln.y());
-            bln.setLocation(bln.x(), y);
+        if (zt < zb) {
+            zb = zt;
+            zt = bln.z();
         }
 
-        if (trf.z() < bln.z()) {
-            z = trf.z();
-            trf.setLocation(trf.z(), bln.z());
-            bln.setLocation(bln.z(), z);
-        }
-
-        this.bln = bln;
-        this.trf = trf;
+        this.bln = new Point(xb, yb, zb);
+        this.trf = new Point(xt, yt, zt);
     }
 
     @Override

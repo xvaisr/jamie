@@ -16,7 +16,7 @@ package jamie.engine.geometry.shapes2D;
 
 import jamie.engine.geometry.basic.Dimension;
 import jamie.engine.geometry.basic.Point;
-import jamie.engine.geometry.shapes3D.Cube;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,22 +54,26 @@ public class Rectangle
     }
 
     public Rectangle(Point bl, Point tr) {
-        int x, y;
+        int xb, xt, yb, yt;
 
-        if (tr.x() < bl.x()) {
-            x = tr.x();
-            tr.setLocation(bl.x(), tr.y());
-            bl.setLocation(x, bl.y());
+        xb = bl.x();
+        yb = bl.y();
+
+        xt = tr.x();
+        yt = tr.y();
+
+        if (xt < xb) {
+            xb = xt;
+            xt = bl.x();
         }
 
-        if (tr.y() < bl.y()) {
-            y = tr.y();
-            tr.setLocation(tr.x(), bl.y());
-            bl.setLocation(bl.x(), y);
+        if (yt < yb) {
+            yb = yt;
+            yt = bl.y();
         }
 
-        this.bl = bl;
-        this.tr = tr;
+        this.bl = new Point(xb, yb);
+        this.tr = new Point(xt, yt);
     }
 
     private void clonePoints() {
@@ -154,20 +158,16 @@ public class Rectangle
 
         try {
             a = this.bl.clone();
-            b = this.bl.clone();
             c = this.tr.clone();
-            d = this.tr.clone();
 
         }
         catch (CloneNotSupportedException ex) {
             a = new Point(this.bl.x(), this.bl.y());
-            b = new Point(this.bl.x(), this.bl.y());
             c = new Point(this.tr.x(), this.tr.y());
-            d = new Point(this.tr.x(), this.tr.y());
         }
 
-        b.move(w, 0);
-        d.move(-w, 0);
+        b = this.bl.translate(w, 0);
+        d = this.tr.translate(-w, 0);
 
         list.add(a);
         list.add(b);
@@ -179,7 +179,10 @@ public class Rectangle
 
     @Override
     public Rectangle clone() throws CloneNotSupportedException {
-        return (Rectangle) super.clone();
+        Rectangle r = (Rectangle) super.clone();
+        r.bl = r.bl.clone();
+        r.tr = r.tr.clone();
+        return r;
     }
 
 }

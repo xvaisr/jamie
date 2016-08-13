@@ -20,13 +20,13 @@ import java.io.Serializable;
 /**
  * Class represents point in a three-dimensional space of Cartesian coordinate system.
  * Class has methods that allow for using it's instances as two-dimensional or
- * three-dimensional points.
+ * three-dimensional points. By extending this class, you can use protected final methods
+ * to change inner fields and make instances effectively mutable.
  * @author Roman Vais
  */
 public class Point implements Cloneable, Serializable, Comparable<Point> {
 
-    public static enum SortBy {x,y,z};
-
+    public static enum SortBy {x,y,z}
     private static SortBy key = SortBy.x;
 
     private int x;
@@ -34,7 +34,7 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
     private int z;
 
     /**
-     * Creates mutable instance of Point suitable for a three-dimensional space
+     * Creates immutable instance of Point suitable for a three-dimensional space
      * represented by Cartesian coordinate system.
      * Default constructor without parameters creates point with coordinates equal
      * to Point(X, Y, Z) = [0, 0, 0];
@@ -44,7 +44,7 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
     }
 
     /**
-     * Creates mutable instance of Point suitable for a three-dimensional space
+     * Creates immutable instance of Point suitable for a three-dimensional space
      * represented by Cartesian coordinate system.
      * Constructor with X and Y parameters creates point with coordinates equal
      * to Point(X, Y, Z) = [x, y, 0]; allowing it to effectively act
@@ -58,11 +58,10 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
     }
 
     /**
-     * Creates mutable instance of Point suitable for a three-dimensional space
+     * Creates immutable instance of Point suitable for a three-dimensional space
      * represented by Cartesian coordinate system.
-     * Constructor with X and Y parameters creates point with coordinates equal
-     * to Point(X, Y, Z) = [x, y, 0]; allowing it to effectively act
-     * as in two-dimensional space.
+     * Constructor with X, Y and Z parameters creates point with coordinates equal
+     * to Point(X, Y, Z) = [x, y, z];
      *
      * @param x - value of coordinates on X axis
      * @param y - value of coordinates on Y axis
@@ -72,6 +71,70 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    /**
+     * Creates immutable instance of Point suitable for a three-dimensional space
+     * represented by Cartesian coordinate system.
+     * Constructor will copy coordinates from given point.
+     *
+     * @param p - point to copy coordinates from
+     */
+    public Point(Point p) {
+            this.x = p.x();
+            this.y = p.y();
+            this.z = p.z();
+    }
+
+    public static int getDistance(Point a, Point b) {
+        // Pythagorean Theorem
+        double delta;
+        Long distance;
+
+        delta = Point.getRealDistance(a, b);
+        distance = Math.round(delta);
+
+        return distance.intValue();
+    }
+
+    public static double getRealDistance(Point a, Point b) {
+        // Pythagorean Theorem
+        int x, y;
+        x = a.x() - b.x();
+        y = a.y() - b.y();
+
+        return Math.sqrt( ((double) (x*x + y*y) ));
+    }
+
+    public static int getDistance3D(Point a, Point b) {
+        // Pythagorean Theorem
+        double delta;
+        Long distance;
+
+        delta = Point.getRealDistance(a, b);
+        distance = Math.round(delta);
+
+        return distance.intValue();
+    }
+
+    public static double getRealDistance3D(Point a, Point b) {
+        // Pythagorean Theorem
+        int x, y, z;
+        x = a.x() - b.x();
+        y = a.y() - b.y();
+        z = a.z() - b.z();
+
+        return Math.sqrt( (double) (x*x + y*y + z*z) );
+    }
+
+    /**
+     * Sets key for comparison of two Point instances. The value determines by
+     * which axis values should be instances compered.
+     * @param key - one of Point.SortBy.x Point.SortBy.y Point.SortBy.z values
+     */
+    public static void setSortKey(SortBy key) {
+        if (key == null) throw new NullPointerException();
+        Point.key = key;
     }
 
     /**
@@ -104,8 +167,8 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
      * @param dx - distance on X axis to move this point
      * @param dy - distance on Y axis to move this point
      */
-    public void move (int dx, int dy) {
-        this.move(dx, dy, 0);
+    protected final void _move (int dx, int dy) {
+        this._move(dx, dy, 0);
     }
 
     /**
@@ -115,7 +178,7 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
      * @param dy - distance on Y axis to move this point
      * @param dz - distance on Z axis to move this point
      */
-    public void move (int dx, int dy, int dz) {
+    protected final void _move (int dx, int dy, int dz) {
         this.x+= dx;
         this.y+= dy;
         this.z+= dz;
@@ -126,8 +189,8 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
      * @param x - new coordinate value on X axis
      * @param y - new coordinate value on Y axis
      */
-    public void setLocation (int x, int y) {
-        this.setLocation(x, y, this.z);
+    protected final void _setLocation (int x, int y) {
+        this._setLocation(x, y, this.z);
     }
 
     /**
@@ -136,7 +199,7 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
      * @param y - new coordinate value on Y axis
      * @param z - new coordinate value on Z axis
      */
-    public void setLocation (int x, int y, int z) {
+    protected final void _setLocation (int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -165,18 +228,40 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
         Point p;
         try {
             p = this.clone();
-            p.move(dx, dy, dz);
+            p._move(dx, dy, dz);
 
         }
         catch (CloneNotSupportedException ex) {
             p = new Point(this.x, this.y, this.z);
-            p.move(dx, dy, dz);
+            p._move(dx, dy, dz);
         }
         return p;
     }
 
+    /**
+     * Returns whether or not is this point behaving as 2D point.
+     * @return true if z coordinate is equal to 0
+     */
     public boolean getIs2D() {
         return this.z == 0;
+    }
+
+    /**
+     * Computes distance of this point to given one.
+     * @param p - distant point
+     * @return value of distance
+     */
+    public int getDistanceTo(Point p) {
+        return Point.getDistance3D(this, p);
+    }
+
+    /**
+     * Computes distance of this point to given one.
+     * @param p - distant point
+     * @return value of distance as double precision number
+     */
+    public double getRealDistanceTo(Point p) {
+        return Point.getRealDistance3D(this, p);
     }
 
     @Override
@@ -205,16 +290,16 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
         return hash;
     }
 
-    /**
-     * Sets key for comparison of two Point instances. The value determines by
-     * which axis values should be instances compered.
-     * @param key - one of Point.SortBy.x Point.SortBy.y Point.SortBy.z values
-     */
-    public static void setSortKey(SortBy key) {
-        if (key == null) throw new NullPointerException();
-        Point.key = key;
-    }
 
+    /**
+     * Compares coordinates of this point to another one.
+     * This method compares coordinates on one of the three axes
+     * by subtracting them. Coordinates of which axes are being compared
+     * can be set by {@code Point.setSortKey()}. Default is x axis.
+     * @param p - point for comparison
+     * @return subtraction of coordinates
+     * @see Point.setSortKey(), Comparable interface
+     */
     @Override
     public int compareTo(Point p) {
         int result;
