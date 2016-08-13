@@ -12,35 +12,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package jamie.engine.geometry.shapes;
+package jamie.engine.geometry.shapes3D;
 
 import jamie.engine.geometry.basic.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Roman Vais
  */
-public class Polygon
-        implements Serializable, Shape {
+public class Polygon3D
+        implements Serializable, Shape3D {
 
     private Point midpoint;
     private ArrayList<Point> verticies;
 
-    public Polygon() {
+    public Polygon3D() {
         this(new Point());
     }
 
-    public Polygon(Point midpoint) {
+    public Polygon3D(Point midpoint) {
         this(midpoint, Collections.emptyList());
     }
 
-    public Polygon(Point midpoint, List<Point> verticies) {
+    public Polygon3D(Point midpoint, List<Point> verticies) {
         this.midpoint = midpoint;
         this.verticies = new ArrayList<>();
         this.verticies.addAll(verticies);
@@ -63,7 +61,7 @@ public class Polygon
 
     @Override
     public boolean contains(Point p) {
-        if (!this.getBoundingBox().contains(p)) {
+        if (!this.getBoundingCube().contains(p)) {
             return false;
         }
 
@@ -71,27 +69,27 @@ public class Polygon
     }
 
     @Override
-    public boolean contains(Rectangle r) {
+    public boolean contains(Cube c) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean contains(Shape s) {
+    public boolean contains(Shape3D s) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean intersects(Rectangle r) {
+    public boolean intersects(Cube r) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean intersects(Shape s) {
+    public boolean intersects(Shape3D s) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Rectangle getBoundingBox() {
+    public Cube getBoundingCube() {
         ArrayList<Point> set;
         int x, y, w, h;
 
@@ -106,32 +104,7 @@ public class Polygon
         h = set.get(set.size() - 1).y() - set.get(0).y();
 
         Point.setSortKey(Point.SortBy.y);
-        return new Rectangle(new Point(x, y), w, h);
-    }
-
-    @Override
-    public Cube getBoundingCube() {
-        ArrayList<Point> set;
-        int x, y, z, w, h, d;
-
-        set = (ArrayList<Point>) this.verticies.clone();
-        Collections.sort(set);
-        x = set.get(0).x();
-        w = set.get(set.size() - 1).x() - set.get(0).x();
-
-        Point.setSortKey(Point.SortBy.y);
-        Collections.sort(set);
-        y = set.get(0).y();
-        h = set.get(set.size() - 1).y() - set.get(0).y();
-
-        Point.setSortKey(Point.SortBy.z);
-        Collections.sort(set);
-        z = set.get(0).z();
-        d = set.get(set.size() - 1).z() - set.get(0).z();
-
-        Point.setSortKey(Point.SortBy.y);
-        return new Cube(new Point(x, y, z), w, h, d);
-
+        return new Cube();
     }
 
     @Override

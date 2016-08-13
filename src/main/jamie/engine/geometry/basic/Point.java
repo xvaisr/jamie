@@ -175,6 +175,10 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
         return p;
     }
 
+    public boolean getIs2D() {
+        return this.z == 0;
+    }
+
     @Override
     public String toString() {
         return "Point(x,y,z) = " + x +", " + y +", "  + z +";" ;

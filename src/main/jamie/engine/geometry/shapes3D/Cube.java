@@ -13,17 +13,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.engine.geometry.shapes;
+package jamie.engine.geometry.shapes3D;
 
-import jamie.engine.geometry.basic.Dimension3D;
 import jamie.engine.geometry.basic.Point;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
  * @author Roman Vais
  */
-public class Cube implements Serializable{
+public class Cube implements Serializable, Shape3D {
 
     private Point bln;   // bottom left near
     private Point trf;   // top right far
@@ -77,5 +77,40 @@ public class Cube implements Serializable{
 
         this.bln = bln;
         this.trf = trf;
+    }
+
+    @Override
+    public boolean contains(Point p) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean contains(Cube c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean contains(Shape3D s) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean intersects(Cube c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean intersects(Shape3D s) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Cube getBoundingCube() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Point> getVertices() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

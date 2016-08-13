@@ -12,10 +12,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package jamie.engine.geometry.shapes;
+package jamie.engine.geometry.shapes2D;
 
 import jamie.engine.geometry.basic.Dimension;
 import jamie.engine.geometry.basic.Point;
+import jamie.engine.geometry.shapes3D.Cube;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -143,21 +144,6 @@ public class Rectangle
         }
         r.clonePoints();
         return r;
-    }
-
-    @Override
-    public Cube getBoundingCube() {
-        Point bln, trf;
-        try {
-            bln = this.bl.clone();
-            trf = this.tr.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-            bln = new Point(this.bl.x(), this.bl.y());
-            trf = new Point(this.tr.x(), this.tr.y());
-        }
-
-        return new Cube(bln, trf);
     }
 
     @Override

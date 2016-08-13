@@ -13,12 +13,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.engine.geometry.shapes;
+package jamie.engine.geometry.shapes3D;
+
+import jamie.engine.geometry.basic.Point;
+import java.util.List;
 
 /**
  *
  * @author Roman Vais
  */
-public class Path {
+public interface Shape3D {
+
+    public boolean contains(Point p);
+    public boolean contains(Cube c);
+    public boolean contains(Shape3D s);
+
+    public boolean intersects(Cube c);
+    public boolean intersects(Shape3D s);
+
+    public Cube getBoundingCube();
+
+    public List<Point> getVertices();
 
 }

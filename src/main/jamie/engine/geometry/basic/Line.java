@@ -20,5 +20,51 @@ package jamie.engine.geometry.basic;
  * @author Roman Vais
  */
 public class Line {
+    // k, l are points making the line and u, no are vectors (why make duplicate class?)
+    private final Point k, l, u, no;
+    public double size;
 
+    public Line(Point k, Point l) {
+        this.k = k;
+        this.l = l;
+        // get directional vector
+        this.u = new Point((l.x() - k.x()), (l.y() - k.y()), (l.z() - k.z()));
+        // get normal vector (for 2D only)
+        this.no = new Point(this.u.y(), -this.u.x());
+    }
+
+    public double getSize() {
+        return this.size;
+    }
+
+    public Point getK() {
+        try {
+            return this.k.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            return new Point(this.k.x(), this.k.y(), this.k.z());
+        }
+    }
+
+    public Point getL() {
+        try {
+            return this.l.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            return new Point(this.l.x(), this.l.y(), this.l.z());
+        }
+    }
+
+    public Point getVector() {
+        try {
+            return this.u.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            return new Point(this.u.x(), this.u.y());
+        }
+    }
+
+    public Point getNormalVector() {
+        return ((this.k.getIs2D() && this.l.getIs2D())? this.no : new Point());
+    }
 }

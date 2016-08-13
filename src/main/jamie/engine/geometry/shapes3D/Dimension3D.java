@@ -13,28 +13,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jamie.engine.geometry.shapes;
+package jamie.engine.geometry.shapes3D;
 
-import jamie.engine.geometry.basic.Point;
-import jamie.engine.geometry.shapes.Cube;
-import jamie.engine.geometry.shapes.Rectangle;
-import java.util.List;
+import jamie.engine.geometry.basic.Dimension;
 
 /**
  *
  * @author Roman Vais
  */
-public interface Shape {
+public class Dimension3D extends Dimension {
 
-    public boolean contains(Point p);
-    public boolean contains(Rectangle r);
-    public boolean contains(Shape s);
+    private final int d;
 
-    public boolean intersects(Rectangle r);
-    public boolean intersects(Shape s);
+    public Dimension3D() {
+        super();
+        this.d = 0;
+    }
 
-    public Rectangle getBoundingBox();
-    public Cube getBoundingCube();
+    public Dimension3D(int weight, int height, int depth) {
+        super(weight, height);
+        this.d = depth;
+    }
 
-    public List<Point> getVertices();
+    public int getDepth() {
+        return this.d;
+    }
+
+    @Override
+    public String toString() {
+        return this.getWidth() + "x" + this.getHeight() + "x" + this.d;
+    }
+
+
 }
