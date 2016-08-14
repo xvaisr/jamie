@@ -18,7 +18,9 @@ package jamie.engine.geometry.basic;
 import java.io.Serializable;
 
 /**
- *
+ * Class encapsulates width and height in single immutable object as integer values. Constructor
+ * with width and height as parameters allows for negative values of width and height although
+ * how other classes using dimension will behave as a result of negative values is undefined.
  * @author Roman Vais
  */
 public class Dimension implements Serializable {
@@ -26,24 +28,52 @@ public class Dimension implements Serializable {
     private final int w;
     private final int h;
 
+    /**
+     * Creates immutable instance of Dimension representing width and height of an object.
+     * Default constructor without parameters creates dimension with both attributes,
+     * width and height, equal to zero.
+     */
     public Dimension() {
         this(0, 0);
     }
 
-    public Dimension(int weight, int height) {
-        this.w = weight;
+    /**
+     * Creates immutable instance of Dimension representing width and height of an object.
+     * Constructor without parameters creates dimension with both attributes,
+     * width and height, equal to its corresponding arguments.
+     * @param widht - integer value of width
+     * @param height - integer value of height
+     */
+    public Dimension(int widht, int height) {
+        this.w = widht;
         this.h = height;
     }
 
+    /**
+     * Creates immutable instance of Dimension representing width and height of an object.
+     * Constructor without parameters creates dimension with both attributes,
+     * width and height, equal to distance on x and y axis between these points where
+     * x axis distance represents width and y axis represents height.
+     * @param p - point used for computing dimension
+     * @param q - point used for computing dimension
+     */
     public Dimension(Point p, Point q) {
         this.w = Math.abs(q.x() - p.x());
         this.h = Math.abs(q.y() - p.y());
     }
 
+    /**
+     * Returns width of this dimension.
+     * @return width of this dimension
+     */
     public int getWidth() {
         return this.w;
     }
 
+    /**
+     * Returns height of this dimension.
+     * @return height of this dimension
+     */
     public int getHeight() {
         return this.h;
     }
@@ -52,10 +82,4 @@ public class Dimension implements Serializable {
     public String toString() {
         return this.w + "x" + this.h;
     }
-
-
-
-
-
-
 }

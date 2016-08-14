@@ -15,15 +15,28 @@
 
 package jamie.engine.geometry.basic;
 
+import java.io.Serializable;
+
 /**
- *
+ * Class represents infinite straight line defined by two points in two-dimensional or three-dimensional space.
+ * If line is defined in two-dimensional space, instance can provide normal vector.
  * @author Roman Vais
  */
-public class Line {
+public class Line implements Serializable, Cloneable {
     // k, l are points making the line and u, no are vectors (why make duplicate class?)
     private final Point k, l, u, no;
-    public double size;
+    private final boolean twoDimensional;
 
+    /**
+     * Creates instance of line represented by two points or its directional vector.
+     * Whether or not is line defined in two-dimensional or three-dimensional space depends
+     * only on the two points defining the line. If defining points are both two-dimensional
+     * (coordinate of z axis is equal to zero), than the line is two-dimensional as well.
+     * otherwise the line is considered to be three dimensional.
+     *
+     * @param k - one of the two defining points
+     * @param l - one of the two defining points
+     */
     public Line(Point k, Point l) {
         this.k = k;
         this.l = l;
@@ -31,40 +44,52 @@ public class Line {
         this.u = new Point((l.x() - k.x()), (l.y() - k.y()), (l.z() - k.z()));
         // get normal vector (for 2D only)
         this.no = new Point(this.u.y(), -this.u.x());
+
+        this.twoDimensional = k.getIs2D() && l.getIs2D();
     }
 
-    public double getSize() {
-        return this.size;
-    }
-
+    /**
+     * Returns one of the two points defining this line.
+     * @return one of the two points defining this line
+     */
     public Point getK() {
-        try {
-            return this.k.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-            return new Point(this.k.x(), this.k.y(), this.k.z());
-        }
+        return this.k;
     }
 
+    /**
+     * Returns one of the two points defining this line.
+     * @return one of the two points defining this line
+     */
     public Point getL() {
-        try {
-            return this.l.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-            return new Point(this.l.x(), this.l.y(), this.l.z());
-        }
+        return this.l;
     }
 
+    /**
+     * Returns directional vector defining this line.
+     * @return point with coordinates corresponding to coordinates of directional
+     * vector for this line.
+     */
     public Point getVector() {
-        try {
-            return this.u.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-            return new Point(this.u.x(), this.u.y());
-        }
+        return this.u;
     }
 
+    /**
+     * Returns two-dimensional normal vector defining this line.
+     * If line is not two-dimensional, returns point with all coordinates equal
+     * to zero.
+     * @return point with coordinates corresponding to coordinates of normal
+     * vector for this line or point P[0, 0, 0]
+     */
     public Point getNormalVector() {
         return ((this.k.getIs2D() && this.l.getIs2D())? this.no : new Point());
     }
+
+    /**
+     * Returns whether or not is this line considered to be 2D line.
+     * @return true if z coordinate of both defining points is equal to 0
+     */
+    public boolean getIs2D() {
+        return this.twoDimensional;
+    }
+
 }

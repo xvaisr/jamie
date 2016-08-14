@@ -26,6 +26,9 @@ import java.io.Serializable;
  */
 public class Point implements Cloneable, Serializable, Comparable<Point> {
 
+    /**
+     * Enumeration of values which can be used as key for comparison/sort process of Points
+     */
     public static enum SortBy {x,y,z}
     private static SortBy key = SortBy.x;
 
@@ -86,6 +89,15 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
             this.z = p.z();
     }
 
+    /**
+     * Computes distance of two distant points.
+     * Uses Pythagorean theorem to compute distance between two distant points.
+     * This method ignores third coordinate (z axis) as if points are purely
+     * two-dimensional.
+     * @param a - distant point
+     * @param b - distant point
+     * @return value of distance
+     */
     public static int getDistance(Point a, Point b) {
         // Pythagorean Theorem
         double delta;
@@ -97,6 +109,15 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
         return distance.intValue();
     }
 
+    /**
+     * Computes distance of two distant points.
+     * Uses Pythagorean theorem to compute distance between two distant points.
+     * This method ignores third coordinate (z axis) as if points are purely
+     * two-dimensional.
+     * @param a - distant point
+     * @param b - distant point
+     * @return value of distance as double precision number
+     */
     public static double getRealDistance(Point a, Point b) {
         // Pythagorean Theorem
         int x, y;
@@ -106,6 +127,13 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
         return Math.sqrt( ((double) (x*x + y*y) ));
     }
 
+    /**
+     * Computes distance of two distant points.
+     * Uses Pythagorean theorem to compute distance between two distant points.
+     * @param a - distant point
+     * @param b - distant point
+     * @return value of distance
+     */
     public static int getDistance3D(Point a, Point b) {
         // Pythagorean Theorem
         double delta;
@@ -117,6 +145,13 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
         return distance.intValue();
     }
 
+    /**
+     * Computes distance of two distant points.
+     * Uses Pythagorean theorem to compute distance between two distant points.
+     * @param a - distant point
+     * @param b - distant point
+     * @return value of distance as double precision number
+     */
     public static double getRealDistance3D(Point a, Point b) {
         // Pythagorean Theorem
         int x, y, z;
@@ -131,6 +166,7 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
      * Sets key for comparison of two Point instances. The value determines by
      * which axis values should be instances compered.
      * @param key - one of Point.SortBy.x Point.SortBy.y Point.SortBy.z values
+     * @see jamie.engine.geometry.basic.Point.SortBy
      */
     public static void setSortKey(SortBy key) {
         if (key == null) throw new NullPointerException();
@@ -298,7 +334,8 @@ public class Point implements Cloneable, Serializable, Comparable<Point> {
      * can be set by {@code Point.setSortKey()}. Default is x axis.
      * @param p - point for comparison
      * @return subtraction of coordinates
-     * @see Point.setSortKey(), Comparable interface
+     * @see jamie.engine.geometry.basic.Point.setSortKey() <br/>
+     *      Comparable java interface
      */
     @Override
     public int compareTo(Point p) {
