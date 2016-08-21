@@ -16,6 +16,7 @@ package jamie.engine.geometry.shapes2D;
 
 import jamie.engine.geometry.basic.Dimension;
 import jamie.engine.geometry.basic.Point;
+import jamie.tools.algorithms.graph.Graph;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Class represents implementation of 2D rectangle.
  *
  * @author Roman Vais
  */
@@ -32,6 +34,8 @@ public class Rectangle
 
     private Point bl;   // bottom left
     private Point tr;   // top right
+    private ArrayList<Point> vertices;
+    private ArrayList<LineSegment> edges;
 
     public Rectangle() {
         this(new Point(), new Point());
@@ -74,6 +78,8 @@ public class Rectangle
 
         this.bl = new Point(xb, yb);
         this.tr = new Point(xt, yt);
+        this.edges = null;
+        this.vertices = null;
     }
 
     private void clonePoints() {
@@ -139,49 +145,91 @@ public class Rectangle
 
     @Override
     public Rectangle getBoundingBox() {
-        Rectangle r;
-        try {
-            r = this.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-            r = new Rectangle(this.bl, this.tr);
-        }
-        r.clonePoints();
-        return r;
+        return this;
     }
 
     @Override
     public List<Point> getVertices() {
-        ArrayList<Point> list = new ArrayList();
-        int w = Math.abs(this.tr.x() - this.bl.x());
-        Point a, b, c, d;
-
-        try {
-            a = this.bl.clone();
-            c = this.tr.clone();
-
-        }
-        catch (CloneNotSupportedException ex) {
-            a = new Point(this.bl.x(), this.bl.y());
-            c = new Point(this.tr.x(), this.tr.y());
+        if (this.vertices == null) {
+            this.vertices = new ArrayList();
         }
 
-        b = this.bl.translate(w, 0);
-        d = this.tr.translate(-w, 0);
+        if (this.vertices.isEmpty()) {
+            int w = Math.abs(this.tr.x() - this.bl.x());
+            Point a, b, c, d;
 
-        list.add(a);
-        list.add(b);
-        list.add(c);
-        list.add(d);
+            try {
+                a = this.bl.clone();
+                c = this.tr.clone();
+            }
+            catch (CloneNotSupportedException ex) {
+                a = new Point(this.bl.x(), this.bl.y());
+                c = new Point(this.tr.x(), this.tr.y());
+            }
 
-        return Collections.unmodifiableList(list);
+            b = this.bl.translate(w, 0);
+            d = this.tr.translate(-w, 0);
+
+            this.vertices.add(a);
+            this.vertices.add(b);
+            this.vertices.add(c);
+            this.vertices.add(d);
+        }
+
+        return Collections.unmodifiableList(this.vertices);
+    }
+
+    @Override
+    public List<LineSegment> getEdges() {
+        if (this.edges == null) { // serves for lazy evaluation
+            this.edges = new ArrayList();
+        }
+
+        if (this.vertices == null || this.vertices.isEmpty()) {
+            this.getVertices();
+            this.edges.clear();
+        }
+
+        if (this.edges.isEmpty()) {
+
+            Point v1, v2, st;
+            Iterator<Point> it;
+
+            v2 = null;
+            st = null;
+
+            it = this.vertices.iterator();
+            if (it.hasNext()) {
+                v2 = it.next();
+                st = v2;
+            }
+
+            while (it.hasNext()) {
+                v1 = v2;
+                v2 = it.next();
+
+                this.edges.add(new LineSegment(v1, v2));
+            }
+
+            if (v2 != st && st != null) {
+                this.edges.add(new LineSegment(v2, st));
+            }
+        }
+
+        return Collections.unmodifiableList(this.edges);
+    }
+
+    @Override
+    public Graph getGraph() {
+        return null;
     }
 
     @Override
     public Rectangle clone() throws CloneNotSupportedException {
         Rectangle r = (Rectangle) super.clone();
-        r.bl = r.bl.clone();
-        r.tr = r.tr.clone();
+        r.clonePoints();
+        r.edges = null;
+        r.vertices = null;
         return r;
     }
 

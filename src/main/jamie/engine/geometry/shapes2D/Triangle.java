@@ -15,10 +15,79 @@
 
 package jamie.engine.geometry.shapes2D;
 
+import jamie.engine.geometry.basic.Point;
+import jamie.tools.algorithms.graph.Graph;
+import java.io.Serializable;
+import java.util.List;
+
 /**
  *
  * @author Roman Vais
  */
-public class Triangle {
+public class Triangle implements Serializable, Cloneable, Shape {
 
+    Point a,b,c;
+
+    public Triangle() {
+        this(new Point(-1, -1), new Point(1, -1), new Point(0, 1));
+    }
+
+    public Triangle(Point a, Point b, Point c) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+
+
+    @Override
+    public boolean contains(Point p) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean contains(Rectangle r) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean contains(Shape s) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean intersects(Rectangle r) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean intersects(Shape s) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Rectangle getBoundingBox() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Point> getVertices() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
+    @Override
+    public List<LineSegment> getEdges() {
+        return null;
+    }
+
+    @Override
+    public Graph getGraph() {
+        return null;
+    }
+
+    @Override
+    public LineSegment clone() throws CloneNotSupportedException {
+        LineSegment ls = (LineSegment) super.clone();
+        return ls;
+    }
 }
