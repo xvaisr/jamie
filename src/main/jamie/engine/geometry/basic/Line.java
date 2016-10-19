@@ -15,6 +15,7 @@
 
 package jamie.engine.geometry.basic;
 
+import jamie.engine.geometry.shapes2D.LineSegment;
 import java.io.Serializable;
 
 /**
@@ -90,6 +91,16 @@ public class Line implements Serializable, Cloneable {
      */
     public boolean getIs2D() {
         return this.twoDimensional;
+    }
+
+    /**
+     * Returns line segment defined by the same points and vectors as this 2D line.
+     * If this line is not two-dimensional, method flattens it by ignoring Z axis coordinates
+     * of individual points.
+     * @return 2D line segment defined by the same points and vectors.
+     */
+    public LineSegment getLineSegment() {
+        return new LineSegment(this.k, this.l);
     }
 
 }
