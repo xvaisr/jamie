@@ -1,8 +1,6 @@
 manifest.mf
 nbbuild.xml
-nbproject
-src/main/jamie/Agents
-src/main/jamie/Enviroment
-/build/
-/dist/
-/bin/
+nbproject/
+src/main/jamie/Agents/
+src/main/jamie/Enviroment/
+target/
