@@ -18,6 +18,9 @@ package jamie.engine.geometry.shapes2D;
 import jamie.engine.geometry.basic.Point;
 import jamie.tools.algorithms.graph.Graph;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -26,58 +29,155 @@ import java.util.List;
  */
 public class Triangle implements Serializable, Cloneable, Shape {
 
-    Point a,b,c;
+    private Point centroid;
+    private ArrayList<Point> verticies;
+    private ArrayList<LineSegment> edges;
 
     public Triangle() {
         this(new Point(-1, -1), new Point(1, -1), new Point(0, 1));
     }
 
     public Triangle(Point a, Point b, Point c) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
+        this.verticies = new ArrayList();
+        this.verticies.add(a);
+        this.verticies.add(b);
+        this.verticies.add(c);
+
+        // TODO: compute centroid of this triangle
+        this.centroid = new Point();
     }
 
 
     @Override
     public boolean contains(Point p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Rectangle r = this.getBoundingBox();
+        if (!r.contains(p)) {
+            return false;
+        }
+
+        boolean in = false;
+        Iterator<Point> itp = this.getVertices().iterator();
+
+        while(in == false && itp.hasNext()) {
+            Point q = itp.next();
+            in = q.equals(p);
+        }
+
+        if (in) {
+            return in;
+        }
+
+        LineSegment ls = new LineSegment(p, this.centroid);
+        Iterator<LineSegment> ite = this.getEdges().iterator();
+
+        while(in == false && ite.hasNext()) {
+            LineSegment edge = ite.next();
+            in = ls.getIntersects(edge);
+        }
+
+        return !in;
     }
 
     @Override
     public boolean contains(Rectangle r) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.contains((Shape) r);
+
     }
 
     @Override
     public boolean contains(Shape s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (!this.getBoundingBox().contains(s.getBoundingBox())) {
+            return false;
+        }
+
+        // if bounding box contains the shape but shapes do not intersect, than other shape is contained by this one
+        return !this.intersects(s);
     }
 
     @Override
     public boolean intersects(Rectangle r) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.intersects((Shape) r);
     }
 
     @Override
     public boolean intersects(Shape s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean in = false;
+
+        LineSegment mineEdge, itsEdge;
+        Iterator<LineSegment> mine, its;
+        mine = this.getEdges().iterator();
+        its = s.getEdges().iterator();
+
+        while(in == false && mine.hasNext()) {
+            mineEdge = mine.next();
+            while (in == false && its.hasNext()) {
+                itsEdge = its.next();
+
+                in = mineEdge.getIntersects(itsEdge);
+            }
+        }
+
+        return in;
     }
 
     @Override
     public Rectangle getBoundingBox() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<Point> set;
+        int x, y, w, h;
+
+        set = (ArrayList<Point>) this.verticies.clone();
+        Collections.sort(set);
+        x = set.get(0).x();
+        w = set.get(set.size() - 1).x() - set.get(0).x();
+
+        Point.setSortKey(Point.SortBy.y);
+        Collections.sort(set);
+        y = set.get(0).y();
+        h = set.get(set.size() - 1).y() - set.get(0).y();
+
+        Point.setSortKey(Point.SortBy.y);
+        return new Rectangle(new Point(x, y), w, h);
     }
 
     @Override
     public List<Point> getVertices() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Collections.unmodifiableList(this.verticies);
     }
-
 
     @Override
     public List<LineSegment> getEdges() {
-        return null;
+        // serves for lazy evaluation
+        if (this.edges == null)  {
+            this.edges = new ArrayList();
+        }
+
+        if (this.edges.isEmpty()) { // serves for lazy evaluation
+
+            Point v1, v2, st;
+            Iterator<Point> it;
+
+            v2 = null;
+            st = null;
+
+            it = this.verticies.iterator();
+            if (it.hasNext()) {
+                v2 = it.next();
+                st = v2;
+            }
+
+            while (it.hasNext()) {
+                v1 = v2;
+                v2 = it.next();
+
+                this.edges.add(new LineSegment(v1, v2));
+            }
+
+            if (v2 != st && st != null) {
+                this.edges.add(new LineSegment(v2, st));
+            }
+        }
+
+        return Collections.unmodifiableList(this.edges);
     }
 
     @Override

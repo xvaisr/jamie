@@ -16,14 +16,15 @@
 package jamie.tools.algorithms.graph;
 
 import jamie.tools.structures.Pair;
+import java.util.Objects;
 
 /**
  *
  * @author Roman Vais
  */
-public class Edge {
+public class Edge<T> {
 
-    private final Pair<Node, Node> e;
+    private final Pair<Node<T>, Node<T>> e;
     private final boolean notOriented;
 
     public Edge(Node a, Node b) {
@@ -33,6 +34,43 @@ public class Edge {
     public Edge(Node a, Node b, boolean oriented) {
         this.e = new Pair(a, b);
         this.notOriented = !oriented;
+    }
+
+    public Node<T> getNodeA() {
+        return this.e.getA();
+    }
+
+    public Node<T> getNodeB() {
+        return this.e.getB();
+    }
+
+    /**
+     *
+     * @param o
+     * @return
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Edge) {
+            Edge e = (Edge) o;
+
+            if (e.notOriented) {
+                return this.e.contains(e.getNodeA()) && this.e.contains(e.getNodeB());
+            }
+            else {
+                return this.e.getA().equals(e.getNodeA()) && this.e.getB().equals(e.getNodeB());
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.e);
+        hash = 17 * hash + (this.notOriented ? 1 : 0);
+        return hash;
     }
 
 }

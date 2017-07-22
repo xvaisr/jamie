@@ -41,6 +41,10 @@ public final class Pair <A, B> {
         return this.b;
     }
 
+    public boolean contains(Object o) {
+        return this.a.equals(o) || this.b.equals(o);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj.getClass() != this.getClass()) {

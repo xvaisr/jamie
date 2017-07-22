@@ -33,7 +33,7 @@ import java.util.List;
  * @author Roman Vais
  */
 public class Polygon
-        implements Serializable, Shape, Cloneable{
+        implements Serializable, Cloneable, Shape {
 
     private Point midpoint;
     private ArrayList<Point> verticies;

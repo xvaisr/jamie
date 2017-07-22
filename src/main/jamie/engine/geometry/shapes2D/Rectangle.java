@@ -30,7 +30,7 @@ import java.util.List;
  * @author Roman Vais
  */
 public class Rectangle
-        implements Serializable, Shape, Cloneable {
+        implements Serializable, Cloneable, Shape {
 
     private Point bl;   // bottom left
     private Point tr;   // top right

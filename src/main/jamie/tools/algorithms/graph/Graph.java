@@ -15,10 +15,54 @@
 
 package jamie.tools.algorithms.graph;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 /**
  *
  * @author Roman Vais
  */
-public class Graph {
+public class Graph<T> {
+
+    private final boolean oriented;
+    private Node<T> lastNode;
+    private final Set<Edge<T>> edges;
+    private final Set<Node<T>> nodes;
+
+    public Graph() {
+        this(false, null);
+    }
+
+    public Graph(boolean oriented) {
+        this(oriented, null);
+    }
+
+    public Graph(boolean oriented, Node<T> rootNode) {
+        this.oriented = oriented;
+        this.lastNode = rootNode;
+        this.edges = new LinkedHashSet();
+        this.nodes = new LinkedHashSet();
+        this.nodes.add(rootNode);
+    }
+
+    public void addNode(Node<T> n) {
+        if (lastNode == null && this.nodes.isEmpty()) {
+            this.nodes.add(n);
+            lastNode = n;
+            return;
+        }
+        else if (lastNode == null) {
+            lastNode = this.nodes.iterator().next();
+        }
+
+        this.nodes.add(n);
+        this.edges.add(new Edge(this.lastNode, n, this.oriented));
+        this.lastNode = n;
+    }
+
+    public Node<T> getCurrentNode() {
+        return this.lastNode;
+    }
+
 
 }
