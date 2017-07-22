@@ -21,6 +21,7 @@ import java.util.Set;
 /**
  *
  * @author Roman Vais
+ * @param <T>
  */
 public class Graph<T> {
 

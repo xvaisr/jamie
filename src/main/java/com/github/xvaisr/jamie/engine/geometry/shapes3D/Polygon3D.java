@@ -6,110 +6,114 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.github.xvaisr.jamie.engine.geometry.shapes3D;
 
-import com.github.xvaisr.jamie.engine.geometry.basic.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.github.xvaisr.jamie.engine.geometry.basic.Point;
+
 /**
- *
  * @author Roman Vais
  */
-public class Polygon3D
-        implements Serializable, Shape3D {
+public class Polygon3D implements Serializable, Shape3D {
 
-    private Point midpoint;
-    private ArrayList<Point> verticies;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -8063084832046867390L;
 
-    public Polygon3D() {
-        this(new Point());
-    }
+	private Point midpoint;
 
-    public Polygon3D(Point midpoint) {
-        this(midpoint, Collections.emptyList());
-    }
+	private ArrayList<Point> verticies;
 
-    public Polygon3D(Point midpoint, List<Point> verticies) {
-        this.midpoint = midpoint;
-        this.verticies = new ArrayList<>();
-        this.verticies.addAll(verticies);
-    }
+	public Polygon3D() {
+		this(new Point());
+	}
 
-    public Point getMidpoint() {
-        Point p;
-        try {
-            p = this.midpoint.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-            p = new Point(this.midpoint.x(), this.midpoint.y());
-        }
-        return p;
-    }
+	public Polygon3D(Point midpoint) {
+		this(midpoint, Collections.<Point>emptyList());
+	}
 
-    public boolean getIsConvex() {
-        return false; // TODO: fill method with actual implementation
-    }
+	public Polygon3D(Point midpoint, List<Point> verticies) {
+		this.midpoint = midpoint;
+		this.verticies = new ArrayList();
+		this.verticies.addAll(verticies);
+	}
 
-    @Override
-    public boolean contains(Point p) {
-        if (!this.getBoundingCube().contains(p)) {
-            return false;
-        }
+	public Point getMidpoint() {
+		Point p;
+		try {
+			p = this.midpoint.clone();
+		} catch (CloneNotSupportedException ex) {
+			p = new Point(this.midpoint.x(), this.midpoint.y());
+		}
+		return p;
+	}
 
-        return true; // TODO: finish the implementation of contain method
-    }
+	public boolean getIsConvex() {
+		return false; // TODO: fill method with actual implementation
+	}
 
-    @Override
-    public boolean contains(Cube c) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+      @Override
+	public boolean contains(Point p) {
+		if (!this.getBoundingCube().contains(p)) {
+			return false;
+		}
 
-    @Override
-    public boolean contains(Shape3D s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+		return true; // TODO: finish the implementation of contain method
+	}
 
-    @Override
-    public boolean intersects(Cube r) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+      @Override
+	public boolean contains(Cube c) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
-    @Override
-    public boolean intersects(Shape3D s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+      @Override
+	public boolean contains(Shape3D s) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
-    @Override
-    public Cube getBoundingCube() {
-        ArrayList<Point> set;
-        int x, y, w, h;
+      @Override
+	public boolean intersects(Cube r) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
-        set = (ArrayList<Point>) this.verticies.clone();
-        Collections.sort(set);
-        x = set.get(0).x();
-        w = set.get(set.size() - 1).x() - set.get(0).x();
+      @Override
+	public boolean intersects(Shape3D s) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
-        Point.setSortKey(Point.SortBy.y);
-        Collections.sort(set);
-        y = set.get(0).y();
-        h = set.get(set.size() - 1).y() - set.get(0).y();
+      @Override
+	public Cube getBoundingCube() {
+		ArrayList<Point> set;
+		int x, y, w, h;
 
-        Point.setSortKey(Point.SortBy.y);
-        return new Cube();
-    }
+		set = (ArrayList<Point>) this.verticies.clone();
+		Collections.sort(set);
+		x = set.get(0).x();
+		w = set.get(set.size() - 1).x() - set.get(0).x();
 
-    @Override
-    public List<Point> getVertices() {
-        return Collections.unmodifiableList(this.verticies);
-    }
+		Point.setSortKey(Point.SortBy.y);
+		Collections.sort(set);
+		y = set.get(0).y();
+		h = set.get(set.size() - 1).y() - set.get(0).y();
+
+		Point.setSortKey(Point.SortBy.y);
+		return new Cube();
+	}
+
+      @Override
+	public List<Point> getVertices() {
+		return Collections.unmodifiableList(this.verticies);
+	}
 
 }

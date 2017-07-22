@@ -21,6 +21,7 @@ import java.util.Objects;
 /**
  *
  * @author Roman Vais
+ * @param <T>
  */
 public class Edge<T> {
 
@@ -52,13 +53,13 @@ public class Edge<T> {
     @Override
     public boolean equals(Object o) {
         if (o instanceof Edge) {
-            Edge e = (Edge) o;
+            Edge edge = (Edge) o;
 
-            if (e.notOriented) {
-                return this.e.contains(e.getNodeA()) && this.e.contains(e.getNodeB());
+            if (edge.notOriented) {
+                return this.e.contains(edge.getNodeA()) && this.e.contains(edge.getNodeB());
             }
             else {
-                return this.e.getA().equals(e.getNodeA()) && this.e.getB().equals(e.getNodeB());
+                return this.e.getA().equals(edge.getNodeA()) && this.e.getB().equals(edge.getNodeB());
             }
         }
 
